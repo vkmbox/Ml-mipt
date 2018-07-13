@@ -1,14 +1,22 @@
-package uno;
+package dos;
+
+//import org.apache.commons.math4.linear.Array2DRowRealMatrix;
+//import org.apache.commons.math4.linear.RealMatrix;
+//import org.apache.commons.math4.linear.RealVector;
+import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.linear.MatrixUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
-import org.apache.commons.math4.linear.Array2DRowRealMatrix;
-import org.apache.commons.math4.linear.RealMatrix;
-import org.apache.commons.math4.linear.RealVector;
 
 public class Main{
   
@@ -17,8 +25,28 @@ public class Main{
   }
   
   public static void main(String ... args) throws IOException {
+    List<RealVector> xtrain = new ArrayList<>();
+    try (InputStream xStream = Main.class.getResourceAsStream("xtrain.csv");
+      Scanner scanner = new Scanner(xStream).useDelimiter(";")) {
+      int count = 0;
+      double[] buffer = null;
+      while (scanner.hasNext()) {
+        if ( count == 0 ) {
+          buffer = new double[64];
+        }
+        buffer[count++] = Double.parseDouble(scanner.next());
+        if ( count == 64 ) {
+          xtrain.add(MatrixUtils.createRealVector(buffer));
+        }
+      }
+      //String result = scanner.hasNext() ? scanner.next() : "";
+    }
+      //InputStreamReader reader = new InputStreamReader(xStream, "UTF-8"); ) {
+      //IOUtils.copy(inputStream, writer, encoding);
+//String theString = writer.toString();
+    }
     //File file = new File("E:\\MyProj\\Python\\curs\\1\\Task1a\\cats.txt");
-    String file = "E:\\MyProj\\Python\\curs\\1\\Task1a\\cats.txt";
+    /*String file = "E:\\MyProj\\Python\\curs\\1\\Task1a\\cats.txt";
     List<List<String>> lines = 
     //Stream<?> lines =
       Files.lines(Paths.get(file)).map(s -> s.toLowerCase().replace('.', ' ').replace(',', ' ').replace('\t', ' '))
@@ -59,7 +87,6 @@ public class Main{
       }
     }
     
-    System.out.println(String.format("Лучшее про котов - %d, на втором месте - %d", best, second));
+    System.out.println(String.format("Лучшее про котов - %d, на втором месте - %d", best, second));*/
       
-  }
 }
