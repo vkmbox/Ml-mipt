@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.commons.math3.distribution.NormalDistribution;
+import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.commons.math3.stat.StatUtils;
 import org.apache.commons.math3.util.FastMath;
 
@@ -32,7 +33,7 @@ public class Main {
   
   public static double[] confidenceInterval( double[] values, double alpha ) {
     if (values.length == 0 ) return null;
-    NormalDistribution normal = new NormalDistribution();
+    TDistribution normal = new TDistribution(values.length - 1);
     double quantile = normal.inverseCumulativeProbability(1 - alpha/2);
     //double std = FastMath.sqrt(StatUtils.variance(values));
     double high = StatUtils.mean(values) 
@@ -51,19 +52,52 @@ public class Main {
      */
     double[] mort1 = rows.stream().mapToDouble(Row::getMortality).toArray();
     double[] interval1 = confidenceInterval(mort1, 0.05);
-    System.out.println(interval1[0]);
+    System.out.println("1) lower: " + interval1[0] + ", upper :" + interval1[1] );
     /*
     На данных из предыдущего вопроса постройте 95% доверительный интервал для средней
     годовой смертности по всем южным городам. Чему равна его верхняя граница?
     Округлите ответ до 4 знаков после десятичной точки.
      */
+    double[] mort2 = rows.stream().filter(row -> "South".equals(row.location)) .mapToDouble(Row::getMortality).toArray();
+    double[] interval2 = confidenceInterval(mort2, 0.05);
+    System.out.println("2) lower: " + interval2[0] + ", upper :" + interval2[1] );
     /*
     На тех же данных постройте 95% доверительный интервал для средней годовой
     смертности по всем северным городам. Пересекается ли этот интервал с предыдущим? 
     Как вы думаете, какой из этого можно сделать вывод?
      */
+    double[] mort3 = rows.stream().filter(row -> "North".equals(row.location)) .mapToDouble(Row::getMortality).toArray();
+    double[] interval3 = confidenceInterval(mort3, 0.05);
+    System.out.println("3) lower: " + interval3[0] + ", upper :" + interval3[1] );
     /*
     Пересекаются ли 95% доверительные интервалы для средней жёсткости воды в северных и южных городах?
      */
+    /*
+_tconfint_generic(data[data.location == 'South'].hardness.mean(), data[data.location == 'South'].hardness.std(ddof=1) / np.sqrt(len(data[data.location == 'South'])), len(data[data.location == 'South']) - 1, 0.05, 'two-sided')
+_tconfint_generic(data[data.location == 'North'].hardness.mean(), data[data.location == 'North'].hardness.std(ddof=1) / np.sqrt(len(data[data.location == 'North'])), len(data[data.location == 'North']) - 1, 0.05, 'two-sided')    
+    */
+    double[] Hardness1 = rows.stream()
+        .filter(row -> "South".equals(row.location) && (row.getHardness() != null) ) 
+        .mapToDouble(Row::getHardness).toArray();
+    double[] interval41 = confidenceInterval(Hardness1, 0.05);
+    System.out.println("4a) lower: " + interval41[0] + ", upper :" + interval41[1] );
+
+    double[] Hardness2 = rows.stream()
+        .filter(row -> "North".equals(row.location) && (row.getHardness() != null) ) 
+        .mapToDouble(Row::getHardness).toArray();
+    double[] interval42 = confidenceInterval(Hardness2, 0.05);
+    System.out.println("4b) lower: " + interval42[0] + ", upper :" + interval42[1] );
+
+    NormalDistribution norm = new NormalDistribution();
+    System.out.println("5)Size is: " 
+        + 100 * Math.pow(norm.inverseCumulativeProbability(0.975), 2 ));
+    System.out.println("---------------");
+    /*
+from statsmodels.stats.proportion import proportion_confint
+proportion_confint(1, 50, method = 'normal')    
+    */
+    double pp = 1.0/50.0;
+    double delta = norm.inverseCumulativeProbability(0.975)*FastMath.sqrt((pp*(1-pp))/50.0);
+    System.out.println("1) lower: " + (pp-delta) + ", upper :" + (pp+delta) ); 
   }
 }
