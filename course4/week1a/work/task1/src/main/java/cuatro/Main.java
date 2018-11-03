@@ -92,12 +92,27 @@ _tconfint_generic(data[data.location == 'North'].hardness.mean(), data[data.loca
     System.out.println("5)Size is: " 
         + 100 * Math.pow(norm.inverseCumulativeProbability(0.975), 2 ));
     System.out.println("---------------");
+    double pp = 1.0/50.0;
+    double nn = 50.0;
+    double zz = norm.inverseCumulativeProbability(0.975);
+    double delta = zz*FastMath.sqrt((pp*(1-pp))/nn);
     /*
 from statsmodels.stats.proportion import proportion_confint
 proportion_confint(1, 50, method = 'normal')    
     */
-    double pp = 1.0/50.0;
-    double delta = norm.inverseCumulativeProbability(0.975)*FastMath.sqrt((pp*(1-pp))/50.0);
-    System.out.println("1) lower: " + (pp-delta) + ", upper :" + (pp+delta) ); 
+    System.out.println("2) lower: " + (pp-delta) + ", upper :" + (pp+delta) ); 
+/*
+from statsmodels.stats.proportion import proportion_confint
+ci_low, ci_upp = proportion_confint(1, 50, alpha = 0.05, method = 'wilson')  
+print (ci_low, ci_upp)
+    */
+/*
+from statsmodels.stats.proportion import samplesize_confint_proportion
+from math import ceil
+ceil(samplesize_confint_proportion(1.0/50, 0.01, method='normal'))
+*/
+    System.out.println("4) : " + Math.pow(zz, 2) * pp*(1.0-pp)/(0.0001) ); 
+
+    System.out.println(norm.inverseCumulativeProbability(0.9985));
   }
 }
