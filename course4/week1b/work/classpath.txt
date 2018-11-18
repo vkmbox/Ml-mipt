@@ -1,0 +1,10 @@
+rem E:\Java\netbeans9\java\modules\ext\nb-mod-jshell-probe.jar;
+/classpath C:/Users/VK/.m2/repository/org/projectlombok/lombok/1.18.0/lombok-1.18.0.jar
+/classpath C:/Users/VK/.m2/repository/org/apache/commons/commons-math3/3.6.1/commons-math3-3.6.1.jar
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
+String file = "e:/MyProj/Courcera/Ml-mipt/course4/week1b/work/pines.txt";
+Stream<String> lines = Files.lines(Paths.get(file));

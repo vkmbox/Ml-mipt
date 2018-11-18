@@ -1,0 +1,22 @@
+VAR#>String file = "e:/MyProj/Courcera/Ml-mipt/course4/week1b/work/pines.txt";
+VAR#>String file = "e:/MyProj/Courcera/Ml-mipt/course4/week1b/work/pines.txt"
+EXPRESSION#>cls
+EXPRESSION#>clear
+EXPRESSION#>clean
+EXPRESSION#>int 1 = 1;
+VAR#>int i= 1;
+VAR#>int ii = 1
+EXPRESSION#>"Hello World"\
+	;
+CMD#>/imports
+IMPORT#>import java.lang.*;
+CMD#>/imports
+VAR#>int ii = 1;
+VAR#>Integer iii = 1;
+EXPRESSION#>"!!!";
+EXPRESSION#>"!!!"\
+	;
+EXPRESSION#>"!!";
+CMD#>/classpath
+EXPRESSION#>"!!"\
+	;
